@@ -8,14 +8,38 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      repos: []
+      repos: [],
+      term: ''
     }
-
+  }
+  
+  componentDidMount () {
+    let that = this;
+    $.ajax({
+      url: '/repos',
+      method: 'GET',
+      data: { username: this.state.term || 'ststar8623' },
+      dataType: 'json',
+      success: function(response) {
+        that.setState({
+          repos: response.repos
+        })
+      }
+    });
   }
 
   search (term) {
     console.log(`${term} was searched`);
     // TODO
+    $.ajax({
+      url: '/repos/import',
+      method: 'POST',
+      data: {username: term},
+      dataType: 'json',
+      success: function(response) {
+        console.log('success');
+      }
+    });
   }
 
   render () {
